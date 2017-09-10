@@ -1,21 +1,39 @@
 package model;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
+import java.io.FilenameFilter;
 
 public class FileHandler
 {
 
-	public static List<String> readFile(String path, Charset encoding) throws IOException
+	static final File dir = new File("PATH_TO_YOUR_DIRECTORY");
+    // array of supported extensions 
+    static final String[] EXTENSIONS = new String[]{
+        "m4a", "mp3", "wav", "aac", "flac"
+    };
+    
+    static final FilenameFilter MUSIC_FILTER = new FilenameFilter()
 	{
-		List<String> lines = Files.readAllLines(Paths.get(path), encoding);
-		return lines;
-	}
+		
+		@Override
+		public boolean accept(File dir, String name)
+		{
+			for(String ext : EXTENSIONS)
+			{
+				if(name.endsWith("." + ext))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	};
+	
+//	public static List<String> readFile(String path, Charset encoding) throws IOException
+//	{
+//		List<String> lines = Files.readAllLines(Paths.get(path), encoding);
+//		return lines;
+//	}
 
 //	public void listDir(File dir)
 //	{

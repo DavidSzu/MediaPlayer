@@ -33,6 +33,8 @@ public class Mainframe extends JFrame
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private final int WIDTH = 1000;
+	private final int HEIGHT = 800;
 	private JPanel contentPane;
 	Listener listener = new Listener();
 	final JFileChooser fc = new JFileChooser();
@@ -75,27 +77,31 @@ public class Mainframe extends JFrame
 		
 		setBackground(Color.DARK_GRAY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	//	setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		setSize(1000, 800);
+		setBounds(100, 100, WIDTH, HEIGHT);
+		setTitle("Media Player");
 		setResizable(true);
 		setVisible(true);
+		
+//		Panels:
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-		contentPane.setSize(getMaximumSize());
+//		contentPane.setSize(getMaximumSize());
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		mainPanel = new JPanel();
-		mainPanel.setBackground(Color.DARK_GRAY);
 		mainPanel.setBounds(0, 100, 984, 661);
+		mainPanel.setOpaque(false);
 		contentPane.add(mainPanel);
 		mainPanel.setLayout(null);
 		
 		panelNorth = new JPanel();
 		panelNorth.setBounds(0, 0, 984, 100);
-		panelNorth.setBackground(Color.GRAY);
+		panelNorth.setOpaque(false);
 		contentPane.add(panelNorth);
+		panelNorth.setLayout(null);
+
 		
 		Listener listener = new Listener();
 		
@@ -103,23 +109,21 @@ public class Mainframe extends JFrame
 		setBtnBackward(new JButton("Backward"));
 		getBtnBackward().setBounds(250, 39, 95, 40);
 		getBtnBackward().addActionListener(listener);
+		panelNorth.add(getBtnBackward());
 		
 		setBtnStartStop(new JButton("Start"));
 		getBtnStartStop().setBounds(450, 39, 95, 40);
 		getBtnStartStop().addActionListener(listener);
+		panelNorth.add(getBtnStartStop());
 		
 		setBtnForward(new JButton("Forward"));
 		getBtnForward().setBounds(650, 39, 95, 40);
 		getBtnForward().addActionListener(listener);
-		
-		
-		panelNorth.setLayout(null);
-		panelNorth.add(getBtnBackward());
-		panelNorth.add(getBtnStartStop());
 		panelNorth.add(getBtnForward());
 		
+		
 		//Menus:
-		setJMenuBar(new JMenuBar());
+		menuBar = new JMenuBar();
 		getJMenuBar().setBounds(0, 0, 984, 21);
 		
 		setMnFileMenu(new JMenu("File"));
@@ -133,6 +137,8 @@ public class Mainframe extends JFrame
 		getJMenuBar().add(getMnTitelMenu());
 		
 		panelNorth.add(getJMenuBar());
+		panelNorth.repaint();
+		
 		
 		
 //		JList<Object> mediaList = new JList<Object>(FileHandler.readFile(path, StandardCharsets.UTF_8).toArray());
