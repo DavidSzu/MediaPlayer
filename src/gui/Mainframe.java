@@ -138,7 +138,8 @@ public class Mainframe extends JFrame
 		
 		panelNorth.add(getJMenuBar());
 		panelNorth.repaint();
-		
+
+
 		
 		
 //		JList<Object> mediaList = new JList<Object>(FileHandler.readFile(path, StandardCharsets.UTF_8).toArray());

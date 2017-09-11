@@ -30,8 +30,13 @@ public class Listener implements ActionListener
 			{
 				final File[] dir = fc.getSelectedFiles();
 				File file = fc.getSelectedFile();
-				System.out.println("Opening: " + dir.length + ".");
+				System.out.println("Opening: " + file.getName() + ".");
 			}
+		}
+		
+		if(source == mf.getBtnStartStop())
+		{
+			if()
 		}
 	}
 }
