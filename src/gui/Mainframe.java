@@ -1,31 +1,23 @@
 package gui;
 
-import main.Main;
-
 import java.awt.Color;
-import java.awt.MenuBar;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
 import controller.Listener;
-import model.FileHandler;
-
+import main.Main;
+import model.PlayerFunctions;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
 import javax.swing.JList;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 
 public class Mainframe extends JFrame
 {
@@ -39,17 +31,19 @@ public class Mainframe extends JFrame
 	Listener listener = new Listener();
 	final JFileChooser fc = new JFileChooser();
 	JPanel mainPanel;
-	JPanel panelNorth;
+	JPanel panelSouth;
 	
 	JButton btnBackward;
-	JButton btnStartStop;
+	JButton btnStartPause;
 	JButton btnForward;
+	JButton btnStop;
+	JButton btnShuffle;
 	
 	JMenuBar menuBar;
 	JMenu mnFileMenu;
 	JMenuItem mntmOpen;
 	JMenu mnTitelMenu;
-	
+	PlayerFunctions pf;
 	
 //	private ArrayList<Object> fileList;
 //	private String path = "/Users/David/Music/iTunes/iTunes Media/Music/AC:DC/AC_DC Live_ Collector's Edition [Disc 1]";
@@ -91,40 +85,61 @@ public class Mainframe extends JFrame
 		contentPane.setLayout(null);
 		
 		mainPanel = new JPanel();
-		mainPanel.setBounds(0, 100, 984, 661);
+		mainPanel.setBounds(0, 21, 984, 740);
 		mainPanel.setOpaque(false);
 		contentPane.add(mainPanel);
 		mainPanel.setLayout(null);
 		
-		panelNorth = new JPanel();
-		panelNorth.setBounds(0, 0, 984, 100);
-		panelNorth.setOpaque(false);
-		contentPane.add(panelNorth);
-		panelNorth.setLayout(null);
-
-		
-		Listener listener = new Listener();
+		panelSouth = new JPanel();
+		panelSouth.setBounds(0, 640, 984, 100);
+		mainPanel.add(panelSouth);
+		panelSouth.setOpaque(false);
+		panelSouth.setLayout(null);
 		
 		//Buttons:
 		setBtnBackward(new JButton("Backward"));
-		getBtnBackward().setBounds(250, 39, 95, 40);
+		getBtnBackward().setBounds(110, 39, 95, 40);
 		getBtnBackward().addActionListener(listener);
-		panelNorth.add(getBtnBackward());
+		panelSouth.add(getBtnBackward());
 		
-		setBtnStartStop(new JButton("Start"));
-		getBtnStartStop().setBounds(450, 39, 95, 40);
-		getBtnStartStop().addActionListener(listener);
-		panelNorth.add(getBtnStartStop());
+		setBtnStartPause(new JButton("Start"));
+		getBtnStartPause().setBounds(450, 39, 95, 40);
+		getBtnStartPause().addActionListener(listener);
+		panelSouth.add(getBtnStartPause());
 		
 		setBtnForward(new JButton("Forward"));
-		getBtnForward().setBounds(650, 39, 95, 40);
+		getBtnForward().setBounds(610, 39, 95, 40);
 		getBtnForward().addActionListener(listener);
-		panelNorth.add(getBtnForward());
+		panelSouth.add(getBtnForward());
+		
+		setBtnStop(new JButton("Stop"));
+		getBtnStop().setBounds(279, 39, 95, 40);
+		getBtnStop().addActionListener(listener);
+		panelSouth.add(getBtnStop());
+		
+		setBtnShuffle(new JButton("Shuffle"));
+		getBtnShuffle().setBounds(770, 39, 95, 40);
+		getBtnShuffle().addActionListener(listener);
+		panelSouth.add(getBtnShuffle());
+		
+		//Miscellaneous:
+		JProgressBar progressBar = new JProgressBar();
+		progressBar.setBounds(10, 615, 964, 14);
+		mainPanel.add(progressBar);
+		
+		JScrollBar scrollBar = new JScrollBar();
+		scrollBar.setBounds(967, 11, 17, 593);
+		mainPanel.add(scrollBar);
+		
+		JList mediaList = new JList();
+		mediaList.setBounds(10, 595, 937, -583);
+		mainPanel.add(mediaList);
 		
 		
 		//Menus:
-		menuBar = new JMenuBar();
+		setJMenuBar(new JMenuBar());
 		getJMenuBar().setBounds(0, 0, 984, 21);
+		contentPane.add(menuBar);
 		
 		setMnFileMenu(new JMenu("File"));
 		getJMenuBar().add(getMnFileMenu());
@@ -136,22 +151,30 @@ public class Mainframe extends JFrame
 		setMnTitelMenu(new JMenu("Titel"));
 		getJMenuBar().add(getMnTitelMenu());
 		
-		panelNorth.add(getJMenuBar());
-		panelNorth.repaint();
-
-
-		
-		
-//		JList<Object> mediaList = new JList<Object>(FileHandler.readFile(path, StandardCharsets.UTF_8).toArray());
-//		mediaList.setBackground(Color.DARK_GRAY);
-//		mediaList.setBounds(0, 0, 984, 661);
-//		mediaList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		mainPanel.add(mediaList);
-//		
-//		
+		getJMenuBar().repaint();
 	}
 
 
+	private JButton getBtnShuffle()
+	{
+		return btnShuffle;
+	}
+	private void setBtnShuffle(JButton btnShuffle)
+	{
+		this.btnShuffle = btnShuffle;
+	}
+	
+
+	private JButton getBtnStop()
+	{
+		return btnStop;
+	}
+	private void setBtnStop(JButton btnStop)
+	{
+		this.btnStop = btnStop;
+	}
+
+	
 	public JButton getBtnBackward()
 	{
 		return btnBackward;
@@ -162,13 +185,13 @@ public class Mainframe extends JFrame
 	}
 
 
-	public JButton getBtnStartStop()
+	public JButton getBtnStartPause()
 	{
-		return btnStartStop;
+		return btnStartPause;
 	}
-	public void setBtnStartStop(JButton btnStartStop)
+	public void setBtnStartPause(JButton btnStartPause)
 	{
-		this.btnStartStop = btnStartStop;
+		this.btnStartPause = btnStartPause;
 	}
 
 

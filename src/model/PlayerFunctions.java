@@ -4,68 +4,138 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
 
 public class PlayerFunctions
 {
-	FileInputStream FIS;
-	BufferedInputStream BIS;
-	Mixer mixer;
-	Clip clip;
+	private FileInputStream FIS;
+	private BufferedInputStream BIS;
+	private Player player;
 	
+	private long pauseLocation;
+	private long totalLength;
+	public String fileLocation;
+
+
 	public boolean isplaying = false;
 	
-
 	
 	public void playAudio(String path)
 	{
-		Mixer.Info[] mixInfo = AudioSystem.getMixerInfo();
-		mixer = AudioSystem.getMixer(mixInfo[0]);
-		DataLine.Info dataInfo = new DataLine.Info(Clip.class, null);
-		
 		try
 		{
-			clip = (Clip)mixer.getLine(dataInfo);
+			FIS = new FileInputStream(fileLocation);
+			BIS = new BufferedInputStream(FIS);
+			
+			player = new Player(BIS);
+			
+			totalLength = FIS.available();
+			
+			fileLocation = path + "";
+		} 
+		catch (FileNotFoundException e)
+		{	
+			e.printStackTrace();
 		}
-		catch (LineUnavailableException lue)
+		catch (JavaLayerException e)
 		{
-			lue.printStackTrace();
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			e.printStackTrace();
 		}
 		
+		new Thread()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					player.play();
+					setIsplaying(true);
+				}
+				catch (JavaLayerException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+	
+	public void stopAudio()
+	{
+		if(player != null)
+		{
+			player.close();
+			
+			pauseLocation = 0;
+			totalLength = 0;
+		}
+	}
+	
+	public void pauseAudio()
+	{
+		if(player != null)
+		{
+			try
+			{
+				pauseLocation = FIS.available();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+			player.close();
+		}
+	}
+	
+	public void resumeAudio()
+	{
 		try
 		{
-			URL fileURL = PlayerFunctions.class.getResource(path);
-			AudioInputStream audioStream = AudioSystem.getAudioInputStream(fileURL);
-			clip.open(audioStream);
+			FIS = new FileInputStream(fileLocation);
+			BIS = new BufferedInputStream(FIS);
+			
+			player = new Player(BIS);
+			
+			FIS.skip(totalLength - pauseLocation);
+		} 
+		catch (FileNotFoundException e)
+		{	
+			e.printStackTrace();
 		}
-		catch(LineUnavailableException lue)
+		catch (JavaLayerException e)
 		{
-			lue.printStackTrace();
-		}
-		catch(UnsupportedAudioFileException uafe)
+			e.printStackTrace();
+		} 
+		catch (IOException e)
 		{
-			uafe.printStackTrace();
-		}
-		catch(IOException ioe)
-		{
-			ioe.printStackTrace();
+			e.printStackTrace();
 		}
 		
-		clip.start();
-		isplaying = true;
+		new Thread()
+		{
+			@Override
+			public void run()
+			{
+				try
+				{
+					player.play();
+					setIsplaying(true);
+				}
+				catch (JavaLayerException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}.start();
 	}
 
-
-
-	public boolean isIsplaying()
+	public boolean getIsplaying()
 	{
 		return isplaying;
 	}
