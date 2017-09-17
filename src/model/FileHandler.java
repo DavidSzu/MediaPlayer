@@ -6,6 +6,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class FileHandler
 {
 	Mainframe mf = Main.getMf();
 	IOFileFilter filter = new RegexFileFilter("^(.*?)");
+//	FileFilter filter = new FileNameExtensionFilter("MP3 Files", "m4a", "mp3", "wav", "aac", "flac");
+	
 	
 
 //---------------------------------------------------		
@@ -44,57 +48,87 @@ public class FileHandler
 			path = Paths.get(chooser.getSelectedFile().getPath());
 			return path;
 		}
-		
 		return path;
-		
 	}
 	
-	
-//---------------------------------------------------			
-	public Collection<File> listFiles(String directoryName)
+//---------------------------------------------------				
+	public List<File> listf(String directoryName)
 	{
 		File directory = new File(directoryName);
 		
-		Collection<File> cfiles = FileUtils.listFiles(directory, filter, null);
-
+		List<File> resultList = new ArrayList<File>();
+		
+		File[] fList = directory.listFiles();
+		resultList.addAll(Arrays.asList(fList));
+		for(File file : fList)
+		{
+			if (file.isFile())
+			{
+				System.out.println(file.getAbsolutePath() + " isFile");
+			}
+			else if(file.isDirectory())
+			{
+				resultList.addAll(listf(file.getAbsolutePath()));
+				System.out.println(file.getAbsolutePath() + " isDir");
+			}
+		}
+		System.out.println(fList);
+		return resultList;
+	}
+	
+//---------------------------------------------------				
+//	public Collection<File> listFiles(Path directoryName, Collection<File> files)
+//	{
+//		File directory = new File(directoryName.toString());
+//		
+//		Collection<File> cfiles = FileUtils.listFiles(directory, (IOFileFilter) filter, null);
+//
 ////get all the files from a directory
 //		File[] fList = directory.listFiles();
 //		for(File file : fList)	
 //		{
 //			if(file.isFile())
 //			{
-//				files.add(file);
+////				files.add(file);
+//				System.out.println(file + " isFile");
 //			}
 //			else if(file.isDirectory())
 //			{
-//				listFiles(file.getAbsolutePath(), files);
+////				listFiles(Paths.get(file.getAbsolutePath()), files);
+//				System.out.println(file + " isDirectory");
 //			}
 //		}
-		return cfiles;
-	}
-	
+//		return cfiles;
+//	}
+//	
+////---------------------------------------------------
+//	public List<String> getFileNames(List<String> fileNames, Path dir)
+//	{
+//		try(DirectoryStream<Path> stream = Files.newDirectoryStream(dir))
+//		{
+//			for (Path path : stream)
+//			{
+//				if(path.toFile().isDirectory())
+//				{
+////					getFileNames(fileNames, path);
+//					System.out.println(fileNames + " isDirectory");
+//				}
+//				else
+//				{
+////					fileNames.add(path.toAbsolutePath().toString());
+//					System.out.println(fileNames + " isFile");
+//					System.out.println(path.getFileName());
+//				}
+//			}
+//		} 
+//		catch (IOException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		return fileNames;
+//	}
+
 //---------------------------------------------------
-	public List<String> getFileNames(List<String> fileNames, Path dir)
-	{
-		try(DirectoryStream<Path> stream = Files.newDirectoryStream(dir))
-		{
-			for (Path path : stream)
-			{
-				if(path.toFile().isDirectory())
-				{
-					getFileNames(fileNames, path);
-				}
-				else
-				{
-					fileNames.add(path.toAbsolutePath().toString());
-					System.out.println(path.getFileName());
-				}
-			}
-		} 
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		return fileNames;
-	}
+
+	
 }
