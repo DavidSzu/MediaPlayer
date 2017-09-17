@@ -1,29 +1,34 @@
 package gui;
 
 import java.awt.Color;
+import java.io.File;
 import java.io.IOException;
 
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
 import controller.Listener;
 import main.Main;
+import model.FileHandler;
 import model.PlayerFunctions;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollBar;
-import javax.swing.JList;
 
 public class Mainframe extends JFrame
 {
-	/**
-	 * 
-	 */
+
+//---------------------------------------------------
 	private static final long serialVersionUID = 1L;
 	private final int WIDTH = 1000;
 	private final int HEIGHT = 800;
@@ -43,29 +48,32 @@ public class Mainframe extends JFrame
 	JMenu mnFileMenu;
 	JMenuItem mntmOpen;
 	JMenu mnTitelMenu;
-	PlayerFunctions pf;
 	
-//	private ArrayList<Object> fileList;
-//	private String path = "/Users/David/Music/iTunes/iTunes Media/Music/AC:DC/AC_DC Live_ Collector's Edition [Disc 1]";
-//	
-
+	DefaultListModel<String> listModel;
+	JList<File> mediaList;
+	
+	PlayerFunctions pf;
+	FileHandler fileHandler;
+	
+//---------------------------------------------------
 	public void run()
 	{
 		try
 		{
 			Main.setMf(Main.getMf());
-			//Mainframe frame = Main.getMf();
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-	}
+	}	
 	
-	/**
-	 * Create the frame.
-	 * @throws IOException 
-	 */
+	
+	
+//---------------------------------------------------
+//---------------------------------------------------
+//Constructor:
+	@SuppressWarnings("unchecked")
 	public Mainframe() throws IOException
 	{
 		
@@ -75,12 +83,12 @@ public class Mainframe extends JFrame
 		setTitle("Media Player");
 		setResizable(true);
 		setVisible(true);
-		
-//		Panels:
+
+//---------------------------------------------------		
+//Panels:
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-//		contentPane.setSize(getMaximumSize());
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
@@ -95,8 +103,9 @@ public class Mainframe extends JFrame
 		mainPanel.add(panelSouth);
 		panelSouth.setOpaque(false);
 		panelSouth.setLayout(null);
-		
-		//Buttons:
+
+//---------------------------------------------------
+//Buttons:
 		setBtnBackward(new JButton("Backward"));
 		getBtnBackward().setBounds(110, 39, 95, 40);
 		getBtnBackward().addActionListener(listener);
@@ -107,8 +116,8 @@ public class Mainframe extends JFrame
 		getBtnStartPause().addActionListener(listener);
 		panelSouth.add(getBtnStartPause());
 		
-		setBtnForward(new JButton("Forward"));
-		getBtnForward().setBounds(610, 39, 95, 40);
+		setBtnForward(new JButton(""));
+		getBtnForward().setBounds(611, 39, 49, 40);
 		getBtnForward().addActionListener(listener);
 		panelSouth.add(getBtnForward());
 		
@@ -121,23 +130,18 @@ public class Mainframe extends JFrame
 		getBtnShuffle().setBounds(770, 39, 95, 40);
 		getBtnShuffle().addActionListener(listener);
 		panelSouth.add(getBtnShuffle());
-		
-		//Miscellaneous:
+
+//---------------------------------------------------		
+//Miscellaneous:
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setBounds(10, 615, 964, 14);
 		mainPanel.add(progressBar);
 		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(967, 11, 17, 593);
-		mainPanel.add(scrollBar);
+
 		
-		JList mediaList = new JList();
-		mediaList.setBounds(10, 595, 937, -583);
-		mainPanel.add(mediaList);
-		
-		
-		//Menus:
-		setJMenuBar(new JMenuBar());
+//---------------------------------------------------		
+//Menus:
+		menuBar = new JMenuBar();
 		getJMenuBar().setBounds(0, 0, 984, 21);
 		contentPane.add(menuBar);
 		
@@ -151,10 +155,23 @@ public class Mainframe extends JFrame
 		setMnTitelMenu(new JMenu("Titel"));
 		getJMenuBar().add(getMnTitelMenu());
 		
+		repaint();
 		getJMenuBar().repaint();
+	}
+	
+
+//---------------------------------------------------
+//---------------------------------------------------
+//Getters and Setters:
+	
+public JPanel getMainPanel()
+	{
+		return mainPanel;
 	}
 
 
+
+	//---------------------------------------------------	
 	private JButton getBtnShuffle()
 	{
 		return btnShuffle;
@@ -163,8 +180,7 @@ public class Mainframe extends JFrame
 	{
 		this.btnShuffle = btnShuffle;
 	}
-	
-
+//---------------------------------------------------
 	private JButton getBtnStop()
 	{
 		return btnStop;
@@ -173,8 +189,7 @@ public class Mainframe extends JFrame
 	{
 		this.btnStop = btnStop;
 	}
-
-	
+//---------------------------------------------------
 	public JButton getBtnBackward()
 	{
 		return btnBackward;
@@ -183,8 +198,7 @@ public class Mainframe extends JFrame
 	{
 		this.btnBackward = btnBackward;
 	}
-
-
+//---------------------------------------------------
 	public JButton getBtnStartPause()
 	{
 		return btnStartPause;
@@ -193,8 +207,7 @@ public class Mainframe extends JFrame
 	{
 		this.btnStartPause = btnStartPause;
 	}
-
-
+//---------------------------------------------------
 	public JButton getBtnForward()
 	{
 		return btnForward;
@@ -202,9 +215,9 @@ public class Mainframe extends JFrame
 	public void setBtnForward(JButton btnForward)
 	{
 		this.btnForward = btnForward;
+		btnForward.setIcon(new ImageIcon(Mainframe.class.getResource("/resources/forward.jpg")));
 	}
-
-
+//---------------------------------------------------
 	public JMenuBar getJMenuBar()
 	{
 		return menuBar;
@@ -213,8 +226,7 @@ public class Mainframe extends JFrame
 	{
 		this.menuBar = menuBar;
 	}
-
-
+//---------------------------------------------------
 	public JMenu getMnFileMenu()
 	{
 		return mnFileMenu;
@@ -223,8 +235,7 @@ public class Mainframe extends JFrame
 	{
 		this.mnFileMenu = mnFileMenu;
 	}
-
-
+//---------------------------------------------------
 	public JMenuItem getMntmOpen()
 	{
 		return mntmOpen;
@@ -233,8 +244,7 @@ public class Mainframe extends JFrame
 	{
 		this.mntmOpen = mntmOpen;
 	}
-
-
+//---------------------------------------------------
 	public JMenu getMnTitelMenu()
 	{
 		return mnTitelMenu;
@@ -242,5 +252,20 @@ public class Mainframe extends JFrame
 	public void setMnTitelMenu(JMenu mnTitelMenu)
 	{
 		this.mnTitelMenu = mnTitelMenu;
+	}
+//---------------------------------------------------
+	public DefaultListModel<String> getListModel()
+	{
+		return listModel;
+	}
+
+//---------------------------------------------------
+	public JList<File> getMediaList()
+	{
+		return mediaList;
+	}
+	public void setMediaList(JList<File> mediaList)
+	{
+		this.mediaList = mediaList;
 	}
 }

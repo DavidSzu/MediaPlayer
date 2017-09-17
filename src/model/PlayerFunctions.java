@@ -21,7 +21,7 @@ public class PlayerFunctions
 
 	public boolean isplaying = false;
 	
-	
+//---------------------------------------------------			
 	public void playAudio(String path)
 	{
 		try
@@ -42,7 +42,8 @@ public class PlayerFunctions
 		catch (JavaLayerException e)
 		{
 			e.printStackTrace();
-		} catch (IOException e)
+		} 
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -64,7 +65,8 @@ public class PlayerFunctions
 			}
 		}.start();
 	}
-	
+
+//---------------------------------------------------			
 	public void stopAudio()
 	{
 		if(player != null)
@@ -93,6 +95,7 @@ public class PlayerFunctions
 		}
 	}
 	
+//---------------------------------------------------		
 	public void resumeAudio()
 	{
 		try
