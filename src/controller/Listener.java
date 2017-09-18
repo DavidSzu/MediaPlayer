@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -26,9 +24,7 @@ public class Listener implements ActionListener
 	final JFileChooser fc = new JFileChooser();
 	PlayerFunctions pf = new PlayerFunctions();
 	FileHandler fileHandler = new FileHandler();
-	Collection<File> filesListed;
-	List<String> filesListed2;
-	List<File> filesListed3;
+	List<File> filesListed;
 	public String fileLocation;
 	Path directoryName;
 //	String chooserTitle;
@@ -45,18 +41,15 @@ public class Listener implements ActionListener
 //---------------------------------------------------		 
 		if (source == mf.getMntmOpen())
 		{
-			directoryName = fileHandler.chooseDirectory();
-//			
-//			filesListed = fileHandler.listFiles(directoryName, filesListed);
-//			fileListed = fileHandler.getFileNames(fileListed, directoryName);
+			directoryName = fileHandler.chooseDirectory();	
 			
-			filesListed3 = fileHandler.listf(directoryName.toString());
+			filesListed = fileHandler.listf(directoryName.toString());
 			
 			DefaultListModel listModel = new DefaultListModel();
 			mf.setMediaList(new JList(listModel));
-			for(int i = 0; i < filesListed3.size(); i++)
+			for(int i = 0; i < filesListed.size(); i++)
 			{
-				listModel.addElement(filesListed3.get(i));
+				listModel.addElement(filesListed.get(i));
 			}
 			mf.getMediaList().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			JScrollPane scrollPane = new JScrollPane(mf.getMediaList());
@@ -65,21 +58,8 @@ public class Listener implements ActionListener
 			scrollPane.setViewportView(mf.getMediaList());
 			
 			mf.getMediaList().repaint();
-//			
+			
 //		    FileFilter filter = new FileNameExtensionFilter("MP3 Files", "m4a", "mp3", "wav", "aac", "flac");
-//		    JFileChooser chooser = new JFileChooser("D:\\Music");
-//		    chooser.addChoosableFileFilter(filter);
-////		    
-//		    int returnVal = chooser.showSaveDialog(null);
-////		    
-//		    if(returnVal == JFileChooser.APPROVE_OPTION)
-//		    {
-//		    	File myFile = chooser.getSelectedFile();
-//		    	String song = myFile + "";
-//		    	
-//		    	pf.playAudio(song);
-//		    	String name = chooser.getSelectedFile().getName();
-//		    }
 		}
 		
 //---------------------------------------------------		 
@@ -88,7 +68,7 @@ public class Listener implements ActionListener
 			
 			if(pf.getIsplaying() == false)
 			{
-				pf.playAudio("D:\\Music\\Amon Amarth\\Fate Of Norns\\Arson.mp3");
+				pf.playAudio();
 				mf.getBtnStartPause().setText("Pause");
 				pf.setIsplaying(true);
 			}
@@ -100,9 +80,7 @@ public class Listener implements ActionListener
 			}
 		}
 	}
-	
-//	public Collection<File> getfilesListed()
-//	{
-//		return fileListed;
-//	}
+//---------------------------------------------------		 
+
+
 }

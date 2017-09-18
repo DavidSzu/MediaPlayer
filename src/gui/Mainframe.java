@@ -15,9 +15,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.ListModel;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
 import controller.Listener;
