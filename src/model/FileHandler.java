@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import gui.Mainframe;
 import main.Main;
@@ -15,7 +17,7 @@ import main.Main;
 public class FileHandler
 {
 	Mainframe mf = Main.getMf();
-//	FileFilter filter = new FileNameExtensionFilter("MP3 Files", "m4a", "mp3", "wav", "aac", "flac");
+	FileFilter filter = new FileNameExtensionFilter("Music Files", new String[]{"m4a", "mp3", "wav"});
 	
 	
 
@@ -24,6 +26,8 @@ public class FileHandler
 	{
 		Path path = null;
 		JFileChooser chooser = new JFileChooser();
+		chooser.setFileFilter(filter);
+		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.showOpenDialog(mf);			

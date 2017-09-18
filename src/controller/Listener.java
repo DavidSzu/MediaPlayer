@@ -11,6 +11,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import gui.Mainframe;
 import main.Main;
@@ -27,6 +29,7 @@ public class Listener implements ActionListener
 	List<File> filesListed;
 	public String fileLocation;
 	Path directoryName;
+    FileFilter filter = new FileNameExtensionFilter("MP3 Files", "m4a", "mp3", "wav", "aac", "flac");
 //	String chooserTitle;
 	
 
@@ -59,7 +62,7 @@ public class Listener implements ActionListener
 			
 			mf.getMediaList().repaint();
 			
-//		    FileFilter filter = new FileNameExtensionFilter("MP3 Files", "m4a", "mp3", "wav", "aac", "flac");
+
 		}
 		
 //---------------------------------------------------		 
@@ -68,7 +71,8 @@ public class Listener implements ActionListener
 			
 			if(pf.getIsplaying() == false)
 			{
-				pf.playAudio();
+				//ToDo
+				pf.playAudio(mf.getMediaList().getSelectedValue().getPath());
 				mf.getBtnStartPause().setText("Pause");
 				pf.setIsplaying(true);
 			}
