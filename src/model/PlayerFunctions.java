@@ -1,6 +1,7 @@
 package model;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class PlayerFunctions
 	public boolean isplaying = false;
 	
 //---------------------------------------------------			
-	public void playAudio(String path)
+	public void playAudio(File file)
 	{
 		try
 		{
@@ -33,7 +34,7 @@ public class PlayerFunctions
 			
 			totalLength = FIS.available();
 			
-			fileLocation = path + "";
+			fileLocation = file + "";
 		} 
 		catch (FileNotFoundException e)
 		{	

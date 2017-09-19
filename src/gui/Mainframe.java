@@ -28,7 +28,7 @@ public class Mainframe extends JFrame
 //---------------------------------------------------
 	private static final long serialVersionUID = 1L;
 	private final int WIDTH = 1000;
-	private final int HEIGHT = 800;
+	private final int HEIGHT = 600;
 	private JPanel contentPane;
 	Listener listener = new Listener();
 	final JFileChooser fc = new JFileChooser();
@@ -166,9 +166,7 @@ public JPanel getMainPanel()
 		return mainPanel;
 	}
 
-
-
-	//---------------------------------------------------	
+//---------------------------------------------------	
 	private JButton getBtnShuffle()
 	{
 		return btnShuffle;
@@ -212,7 +210,7 @@ public JPanel getMainPanel()
 	public void setBtnForward(JButton btnForward)
 	{
 		this.btnForward = btnForward;
-		btnForward.setIcon(new ImageIcon(Mainframe.class.getResource("/resources/forward.jpg")));
+//		btnForward.setIcon(new ImageIcon(Mainframe.class.getResource("/resources/forward.jpg")));
 	}
 //---------------------------------------------------
 	public JMenuBar getJMenuBar()

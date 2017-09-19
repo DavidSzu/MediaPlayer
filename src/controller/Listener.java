@@ -30,7 +30,6 @@ public class Listener implements ActionListener
 	public String fileLocation;
 	Path directoryName;
     FileFilter filter = new FileNameExtensionFilter("MP3 Files", "m4a", "mp3", "wav", "aac", "flac");
-//	String chooserTitle;
 	
 
 //---------------------------------------------------		 
@@ -61,8 +60,6 @@ public class Listener implements ActionListener
 			scrollPane.setViewportView(mf.getMediaList());
 			
 			mf.getMediaList().repaint();
-			
-
 		}
 		
 //---------------------------------------------------		 
@@ -72,9 +69,10 @@ public class Listener implements ActionListener
 			if(pf.getIsplaying() == false)
 			{
 				//ToDo
-				pf.playAudio(mf.getMediaList().getSelectedValue().getPath());
-				mf.getBtnStartPause().setText("Pause");
+				pf.playAudio(mf.getMediaList().getSelectedValue().getAbsoluteFile());
+				
 				pf.setIsplaying(true);
+//				mf.getBtnStartPause().setText("Pause");
 			}
 			else
 			{
