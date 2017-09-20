@@ -27,14 +27,14 @@ public class PlayerFunctions
 	{
 		try
 		{
+			fileLocation = file.toString();
+			
 			FIS = new FileInputStream(fileLocation);
 			BIS = new BufferedInputStream(FIS);
 			
 			player = new Player(BIS);
 			
 			totalLength = FIS.available();
-			
-			fileLocation = file + "";
 		} 
 		catch (FileNotFoundException e)
 		{	

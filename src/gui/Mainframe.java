@@ -152,10 +152,8 @@ public class Mainframe extends JFrame
 		setMnTitelMenu(new JMenu("Titel"));
 		getJMenuBar().add(getMnTitelMenu());
 		
-		repaint();
-		getJMenuBar().repaint();
+
 	}
-	
 
 //---------------------------------------------------
 //---------------------------------------------------
@@ -263,4 +261,6 @@ public JPanel getMainPanel()
 	{
 		this.mediaList = mediaList;
 	}
+	
+
 }
