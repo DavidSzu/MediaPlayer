@@ -28,7 +28,7 @@ public class Mainframe extends JFrame
 //---------------------------------------------------
 	private static final long serialVersionUID = 1L;
 	private final int WIDTH = 1000;
-	private final int HEIGHT = 600;
+	private final int HEIGHT = 800;
 	private JPanel contentPane;
 	Listener listener = new Listener();
 	final JFileChooser fc = new JFileChooser();
@@ -65,21 +65,18 @@ public class Mainframe extends JFrame
 		}
 	}	
 	
-	
-	
 //---------------------------------------------------
 //---------------------------------------------------
 //Constructor:
-	@SuppressWarnings("unchecked")
 	public Mainframe() throws IOException
 	{
 		
 		setBackground(Color.DARK_GRAY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, WIDTH, HEIGHT);
+		setBounds(100, 100, 985, 800);
 		setTitle("Media Player");
 		setResizable(true);
-		setVisible(true);
+
 
 //---------------------------------------------------		
 //Panels:
@@ -96,7 +93,7 @@ public class Mainframe extends JFrame
 		mainPanel.setLayout(null);
 		
 		panelSouth = new JPanel();
-		panelSouth.setBounds(0, 640, 984, 100);
+		panelSouth.setBounds(0, 640, 985, 100);
 		mainPanel.add(panelSouth);
 		panelSouth.setOpaque(false);
 		panelSouth.setLayout(null);
@@ -113,8 +110,8 @@ public class Mainframe extends JFrame
 		getBtnStartPause().addActionListener(listener);
 		panelSouth.add(getBtnStartPause());
 		
-		setBtnForward(new JButton(""));
-		getBtnForward().setBounds(611, 39, 49, 40);
+		setBtnForward(new JButton("Forward"));
+		getBtnForward().setBounds(611, 39, 95, 40);
 		getBtnForward().addActionListener(listener);
 		panelSouth.add(getBtnForward());
 		
@@ -134,13 +131,12 @@ public class Mainframe extends JFrame
 		progressBar.setBounds(10, 615, 964, 14);
 		mainPanel.add(progressBar);
 		
-
-		
 //---------------------------------------------------		
 //Menus:
 		menuBar = new JMenuBar();
-		getJMenuBar().setBounds(0, 0, 984, 21);
+		getJMenuBar().setBounds(0, 0, 985, 21);
 		contentPane.add(menuBar);
+		
 		
 		setMnFileMenu(new JMenu("File"));
 		getJMenuBar().add(getMnFileMenu());
@@ -151,10 +147,12 @@ public class Mainframe extends JFrame
 		
 		setMnTitelMenu(new JMenu("Titel"));
 		getJMenuBar().add(getMnTitelMenu());
+		getJMenuBar().setVisible(true);
 		
-
+//---------------------------------------------------
+//End of constructor
+		setVisible(true);
 	}
-
 //---------------------------------------------------
 //---------------------------------------------------
 //Getters and Setters:
@@ -163,7 +161,6 @@ public JPanel getMainPanel()
 	{
 		return mainPanel;
 	}
-
 //---------------------------------------------------	
 	private JButton getBtnShuffle()
 	{
@@ -251,7 +248,6 @@ public JPanel getMainPanel()
 	{
 		return listModel;
 	}
-
 //---------------------------------------------------
 	public JList<File> getMediaList()
 	{
@@ -261,6 +257,4 @@ public JPanel getMainPanel()
 	{
 		this.mediaList = mediaList;
 	}
-	
-
 }

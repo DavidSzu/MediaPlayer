@@ -83,6 +83,4 @@ public class Listener implements ActionListener
 		}
 	}
 //---------------------------------------------------		 
-
-
 }

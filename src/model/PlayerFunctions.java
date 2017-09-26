@@ -19,7 +19,6 @@ public class PlayerFunctions
 	private long totalLength;
 	public String fileLocation;
 
-
 	public boolean isplaying = false;
 	
 //---------------------------------------------------			
