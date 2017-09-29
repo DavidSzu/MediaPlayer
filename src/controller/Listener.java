@@ -3,7 +3,10 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -69,10 +72,19 @@ public class Listener implements ActionListener
 			if(pf.getIsplaying() == false)
 			{
 				//ToDo
-				pf.playAudio(mf.getMediaList().getSelectedValue().getAbsoluteFile());
+//				URL soundURL = Listener.class.getResource("/src/resources/Mission.m4a");
+//				pf.playAudio();
+				try
+				{
+					pf.playAudio(new File(mf.getMediaList().getSelectedValue().getAbsoluteFile().getPath()).toURI().toURL());
+				}
+				catch (MalformedURLException e1)
+				{
+					e1.printStackTrace();
+				}
 				
 				pf.setIsplaying(true);
-//				mf.getBtnStartPause().setText("Pause");
+				mf.getBtnStartPause().setText("Pause");
 			}
 			else
 			{
