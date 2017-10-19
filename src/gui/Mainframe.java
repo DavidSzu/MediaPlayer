@@ -3,9 +3,10 @@ package gui;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
+//import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -15,44 +16,49 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
 import controller.Listener;
 import main.Main;
 import model.FileHandler;
-import model.PlayerFunctions;
+import java.awt.FlowLayout;
+import javax.swing.JLabel;
 
 public class Mainframe extends JFrame
 {
-
-//---------------------------------------------------
+// ---------------------------------------------------
 	private static final long serialVersionUID = 1L;
-	private final int WIDTH = 1000;
-	private final int HEIGHT = 800;
 	private JPanel contentPane;
 	Listener listener = new Listener();
 	final JFileChooser fc = new JFileChooser();
 	JPanel mainPanel;
-	JPanel panelSouth;
-	
+	JPanel panelControlButtons;
+
 	JButton btnBackward;
 	JButton btnStartPause;
 	JButton btnForward;
 	JButton btnStop;
 	JButton btnShuffle;
-	
+	JButton btnRepeatLoop;
+
 	JMenuBar menuBar;
 	JMenu mnFileMenu;
-	JMenuItem mntmOpen;
+	JMenuItem menuItemOpen;
 	JMenu mnTitelMenu;
-	
+
+	JLabel lblTrackProgress;
+	JLabel lblTrackDuration;
+
 	DefaultListModel<String> listModel;
 	JList<File> mediaList;
-	
-	PlayerFunctions pf;
+
 	FileHandler fileHandler;
-	
-//---------------------------------------------------
+	private JPanel panelSouth;
+	private JProgressBar progressBar;
+
+// ---------------------------------------------------
 	public void run()
 	{
 		try
@@ -63,123 +69,153 @@ public class Mainframe extends JFrame
 		{
 			e.printStackTrace();
 		}
-	}	
-	
-//---------------------------------------------------
-//---------------------------------------------------
-//Constructor:
-	public Mainframe() throws IOException
-	{
-		
+	}
+
+// ---------------------------------------------------
+// ---------------------------------------------------
+// Constructor:
+	public Mainframe() throws IOException {
 		setBackground(Color.DARK_GRAY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 985, 800);
+		setBounds(100, 100, 985, 740);
 		setTitle("Media Player");
 		setResizable(true);
 
-
-//---------------------------------------------------		
-//Panels:
+// ---------------------------------------------------
+// Panels:
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		mainPanel = new JPanel();
-		mainPanel.setBounds(0, 21, 984, 740);
+		mainPanel.setBounds(0, 21, 984, 800);
 		mainPanel.setOpaque(false);
 		contentPane.add(mainPanel);
 		mainPanel.setLayout(null);
-		
+
+		panelControlButtons = new JPanel();
+		panelControlButtons.setForeground(Color.LIGHT_GRAY);
+		panelControlButtons.setBackground(Color.LIGHT_GRAY);
+		panelControlButtons.setBounds(0, 619, 985, 39);
+		mainPanel.add(panelControlButtons);
+		panelControlButtons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
 		panelSouth = new JPanel();
-		panelSouth.setBounds(0, 640, 985, 100);
+		panelSouth.setBackground(Color.LIGHT_GRAY);
+		panelSouth.setBounds(0, 658, 985, 39);
 		mainPanel.add(panelSouth);
-		panelSouth.setOpaque(false);
-		panelSouth.setLayout(null);
 
-//---------------------------------------------------
-//Buttons:
+// ---------------------------------------------------
+// Buttons:
 		setBtnBackward(new JButton("Backward"));
-		getBtnBackward().setBounds(110, 39, 95, 40);
 		getBtnBackward().addActionListener(listener);
-		panelSouth.add(getBtnBackward());
-		
-		setBtnStartPause(new JButton("Start"));
-		getBtnStartPause().setBounds(450, 39, 95, 40);
-		getBtnStartPause().addActionListener(listener);
-		panelSouth.add(getBtnStartPause());
-		
-		setBtnForward(new JButton("Forward"));
-		getBtnForward().setBounds(611, 39, 95, 40);
-		getBtnForward().addActionListener(listener);
-		panelSouth.add(getBtnForward());
-		
-		setBtnStop(new JButton("Stop"));
-		getBtnStop().setBounds(279, 39, 95, 40);
-		getBtnStop().addActionListener(listener);
-		panelSouth.add(getBtnStop());
-		
-		setBtnShuffle(new JButton("Shuffle"));
-		getBtnShuffle().setBounds(770, 39, 95, 40);
-		getBtnShuffle().addActionListener(listener);
-		panelSouth.add(getBtnShuffle());
 
-//---------------------------------------------------		
-//Miscellaneous:
-		JProgressBar progressBar = new JProgressBar();
-		progressBar.setBounds(10, 615, 964, 14);
-		mainPanel.add(progressBar);
-		
-//---------------------------------------------------		
-//Menus:
+		setBtnShuffle(new JButton("Enable Shuffle"));
+		getBtnShuffle().addActionListener(listener);
+		panelControlButtons.add(getBtnShuffle());
+		panelControlButtons.add(getBtnBackward());
+
+		setBtnForward(new JButton("Forward"));
+		getBtnForward().addActionListener(listener);
+
+		setBtnStartPause(new JButton("Start"));
+		getBtnStartPause().addActionListener(listener);
+		panelControlButtons.add(getBtnStartPause());
+		panelControlButtons.add(getBtnForward());
+
+		setBtnStop(new JButton("Stop"));
+		getBtnStop().addActionListener(listener);
+		panelControlButtons.add(getBtnStop());
+
+		setBtnRepeatloop(new JButton("Loop off"));
+		getBtnRepeatloop().addActionListener(listener);
+		panelControlButtons.add(btnRepeatLoop);
+
+// ---------------------------------------------------
+// Menus:
 		menuBar = new JMenuBar();
 		getJMenuBar().setBounds(0, 0, 985, 21);
 		contentPane.add(menuBar);
-		
-		
+
 		setMnFileMenu(new JMenu("File"));
-		getJMenuBar().add(getMnFileMenu());
-		
+		getJMenuBar().add(getMenuFileMenu());
+
 		setMntmOpen(new JMenuItem("Open"));
-		getMnFileMenu().add(getMntmOpen());
-		getMntmOpen().addActionListener(listener);
-		
+		getMenuFileMenu().add(getMenuItemOpen());
+		getMenuItemOpen().addActionListener(listener);
+
 		setMnTitelMenu(new JMenu("Titel"));
-		getJMenuBar().add(getMnTitelMenu());
+		getJMenuBar().add(getMenuTitelMenu());
 		getJMenuBar().setVisible(true);
-		
-//---------------------------------------------------
-//End of constructor
+
+// ---------------------------------------------------
+// Miscellaneous:
+		setLblTrackProgress(new JLabel("--:--"));
+
+		progressBar = new JProgressBar();
+
+		setLblTrackDuration(new JLabel("--:--"));
+		panelSouth.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panelSouth.add(lblTrackProgress);
+		panelSouth.add(progressBar);
+		panelSouth.add(lblTrackDuration);
+
+// ---------------------------------------------------
+// End of constructor
 		setVisible(true);
 	}
-//---------------------------------------------------
-//---------------------------------------------------
-//Getters and Setters:
 	
-public JPanel getMainPanel()
+// ---------------------------------------------------
+// Add MediaList:
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void addMediaList(List<File> filesListed)
+	{
+		DefaultListModel listModel = new DefaultListModel();
+		setMediaList(new JList(listModel));
+		for (int i = 0; i < filesListed.size(); i++)
+		{
+			listModel.addElement(filesListed.get(i));
+		}
+		getMediaList().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		JScrollPane scrollPane = new JScrollPane(getMediaList());
+		scrollPane.setBounds(10, 10, 937, 583);
+		getMainPanel().add(scrollPane);
+		scrollPane.setViewportView(getMediaList());
+
+		getMediaList().repaint();
+	}
+	
+// ---------------------------------------------------
+// Getters and Setters:
+
+	public JPanel getMainPanel()
 	{
 		return mainPanel;
 	}
-//---------------------------------------------------	
-	private JButton getBtnShuffle()
+
+// ---------------------------------------------------
+	public JButton getBtnShuffle()
 	{
 		return btnShuffle;
 	}
-	private void setBtnShuffle(JButton btnShuffle)
+	public void setBtnShuffle(JButton btnShuffle)
 	{
 		this.btnShuffle = btnShuffle;
 	}
-//---------------------------------------------------
-	private JButton getBtnStop()
+
+// ---------------------------------------------------
+	public JButton getBtnStop()
 	{
 		return btnStop;
 	}
-	private void setBtnStop(JButton btnStop)
+	public void setBtnStop(JButton btnStop)
 	{
 		this.btnStop = btnStop;
 	}
-//---------------------------------------------------
+
+// ---------------------------------------------------
 	public JButton getBtnBackward()
 	{
 		return btnBackward;
@@ -188,7 +224,8 @@ public JPanel getMainPanel()
 	{
 		this.btnBackward = btnBackward;
 	}
-//---------------------------------------------------
+
+// ---------------------------------------------------
 	public JButton getBtnStartPause()
 	{
 		return btnStartPause;
@@ -197,7 +234,8 @@ public JPanel getMainPanel()
 	{
 		this.btnStartPause = btnStartPause;
 	}
-//---------------------------------------------------
+
+// ---------------------------------------------------
 	public JButton getBtnForward()
 	{
 		return btnForward;
@@ -205,9 +243,21 @@ public JPanel getMainPanel()
 	public void setBtnForward(JButton btnForward)
 	{
 		this.btnForward = btnForward;
-//		btnForward.setIcon(new ImageIcon(Mainframe.class.getResource("/resources/forward.jpg")));
+		// btnForward.setIcon(new
+		// ImageIcon(Mainframe.class.getResource("/resources/forward.jpg")));
 	}
-//---------------------------------------------------
+
+// ---------------------------------------------------
+	public JButton getBtnRepeatloop()
+	{
+		return btnRepeatLoop;
+	}
+	public void setBtnRepeatloop(JButton btnRepeatloop)
+	{
+		this.btnRepeatLoop = btnRepeatloop;
+	}
+
+// ---------------------------------------------------
 	public JMenuBar getJMenuBar()
 	{
 		return menuBar;
@@ -216,8 +266,9 @@ public JPanel getMainPanel()
 	{
 		this.menuBar = menuBar;
 	}
-//---------------------------------------------------
-	public JMenu getMnFileMenu()
+
+// ---------------------------------------------------
+	public JMenu getMenuFileMenu()
 	{
 		return mnFileMenu;
 	}
@@ -225,17 +276,19 @@ public JPanel getMainPanel()
 	{
 		this.mnFileMenu = mnFileMenu;
 	}
-//---------------------------------------------------
-	public JMenuItem getMntmOpen()
+	
+// ---------------------------------------------------
+	public JMenuItem getMenuItemOpen()
 	{
-		return mntmOpen;
+		return menuItemOpen;
 	}
 	public void setMntmOpen(JMenuItem mntmOpen)
 	{
-		this.mntmOpen = mntmOpen;
+		this.menuItemOpen = mntmOpen;
 	}
-//---------------------------------------------------
-	public JMenu getMnTitelMenu()
+
+// ---------------------------------------------------
+	public JMenu getMenuTitelMenu()
 	{
 		return mnTitelMenu;
 	}
@@ -243,12 +296,34 @@ public JPanel getMainPanel()
 	{
 		this.mnTitelMenu = mnTitelMenu;
 	}
-//---------------------------------------------------
+
+// ---------------------------------------------------
+	public JLabel getLblTrackProgress()
+	{
+		return lblTrackProgress;
+	}
+	public void setLblTrackProgress(JLabel lblTrackProgress)
+	{
+		this.lblTrackProgress = lblTrackProgress;
+	}
+
+// ---------------------------------------------------
+	public JLabel getLblTrackDuration()
+	{
+		return lblTrackDuration;
+	}
+	public void setLblTrackDuration(JLabel lblTrackDuration)
+	{
+		this.lblTrackDuration = lblTrackDuration;
+	}
+
+// ---------------------------------------------------
 	public DefaultListModel<String> getListModel()
 	{
 		return listModel;
 	}
-//---------------------------------------------------
+
+// ---------------------------------------------------
 	public JList<File> getMediaList()
 	{
 		return mediaList;
@@ -257,4 +332,6 @@ public JPanel getMainPanel()
 	{
 		this.mediaList = mediaList;
 	}
+	
+// ---------------------------------------------------
 }

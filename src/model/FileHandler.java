@@ -48,13 +48,10 @@ public class FileHandler
 	public List<File> listf(String directoryName)
 	{
 		File directory = new File(directoryName);
-
 		List<File> resultList = new ArrayList<File>();
-//		List<String> nameList = new ArrayList<String>();
-
 		File[] fList = directory.listFiles();
 		resultList.addAll(Arrays.asList(fList));
-//		nameList.addAll(Arrays.asList());
+
 		for (File file : fList)
 		{
 			if (file.isFile())
@@ -64,23 +61,24 @@ public class FileHandler
 			else if (file.isDirectory())
 			{
 				resultList.addAll(listf(file.getAbsolutePath()));
-//				nameList.addAll(listf(file.getName()));
-				System.out.println(file.getAbsolutePath() + " isDir");
 			}
 		}
 		System.out.println(fList);
 		return resultList;
-//		return nameList;
 	}
 
 // ---------------------------------------------------
-	public List<String> listNames(List<File> fileList)
+	public List<String> listNames(String directoryName)
 	{
-		List<String> nameList = new ArrayList<String>();
-		
-		for (int i = 0; i < fileList.size(); i++)
+		File directory = new File(directoryName);
+		ArrayList<String> nameList = new ArrayList<String>();
+
+		File[] fList = directory.listFiles();
+		for(int i = 0; i < fList.length; i++)
 		{
-			
+			String fileString = fList[i].toString();
+			nameList.add(fileString);
+			System.out.println(nameList.get(i) + " nameList (" + i + ")");
 		}
 		return nameList;
 	}
