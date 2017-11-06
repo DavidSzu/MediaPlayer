@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -17,12 +18,10 @@ import main.Main;
 public class Props
 {
 	File propsFile = new File("/Users/DSzustkowski/Documents/Code/Java/MediaPlayer/MediaPlayer/resources/properties.cfg");
-	List<String> trackNameList;
+	List<String> trackNameList = new ArrayList<String>();
 	Mainframe mf = Main.getMf();
 
 	// ---------------------------------------------------
-	@SuppressWarnings(
-	{ "unchecked", "rawtypes" })
 	public void propertiesIn()
 	{
 		if (propsFile.exists())
@@ -33,17 +32,13 @@ public class Props
 				filesPropsIn.loadFromXML(new FileInputStream(propsFile));
 				
 				int size = filesPropsIn.size();
-				for(int i = 0; i< size; i++)
-				{
+//				for(int i = 1; i< size; i++)
+				int i = 0;
+				while(i < size)
+				{						
 					trackNameList.add(filesPropsIn.getProperty("ListEntry" + i));
+					i++;
 				}
-//
-//				DefaultListModel<String> listModel = mf.getListModel();
-//				mf.setMediaList(new JList(listModel));
-//				for (int i = 0; i < filesPropsIn.size(); i++)
-//				{
-//					listModel.addElement(filesPropsIn.getProperty("ListEntry" + i));
-//				}
 			}
 			catch (FileNotFoundException fnfe)
 			{

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -26,17 +27,17 @@ public class Listener implements ActionListener
 	Mainframe mf = Main.getMf();
 	final JFileChooser fc = new JFileChooser();
 	FileHandler fileHandler = new FileHandler();
-	List<File> filesListed;
+	
 	List<String> trackNameList;
 	public String fileLocation;
 	Path directoryName;
 	FileFilter filter = new FileNameExtensionFilter("MP3 Files", "m4a", "mp3", "wav", "aac", "flac");
 	private AACPlayer aacPlayer;
 	private Setup setup = new Setup();
+	
 
 
 // ---------------------------------------------------
-
 	public void actionPerformed(ActionEvent e)
 	{
 
@@ -44,16 +45,16 @@ public class Listener implements ActionListener
 		Mainframe mf = Main.getMf();
 
 // ---------------------------------------------------
+		
 		if (source == mf.getMenuItemOpen())
 		{
 			directoryName = fileHandler.chooseDirectory();
-
+			ArrayList<File> filesListed = new ArrayList<File>();
 			filesListed = fileHandler.listf(directoryName.toString());
 			trackNameList = fileHandler.listNames(directoryName.toString());
-			aacPlayer = new AACPlayer(filesListed);
-			mf.addMediaList(filesListed);
+			mf.addMediaList(filesListed);		
 			
-			Main.getProps().propertiesOut(trackNameList);
+			aacPlayer = new AACPlayer(filesListed);
 		}
 
 // ---------------------------------------------------

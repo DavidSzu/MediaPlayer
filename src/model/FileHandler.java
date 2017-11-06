@@ -17,7 +17,7 @@ import main.Main;
 public class FileHandler
 {
 	Mainframe mf = Main.getMf();
-	FileFilter filter = new FileNameExtensionFilter("Music Files", new String[] {"m4a", "mp3", "wav"});
+	FileFilter filter = new FileNameExtensionFilter("Music Files", new String[] {"m4a", "mp3", "wav", "flac"});
 
 // ---------------------------------------------------
 	public Path chooseDirectory()
@@ -27,7 +27,7 @@ public class FileHandler
 		chooser.setFileFilter(filter);
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setFileFilter(filter);
 		chooser.showOpenDialog(mf);
 		System.out.println("current Directory:" + chooser.getCurrentDirectory());
 
@@ -45,25 +45,27 @@ public class FileHandler
 	}
 
 // ---------------------------------------------------
-	public List<File> listf(String directoryName)
+	public ArrayList<File> listf(String directoryName)
 	{
 		File directory = new File(directoryName);
-		List<File> resultList = new ArrayList<File>();
 		File[] fList = directory.listFiles();
-		resultList.addAll(Arrays.asList(fList));
 
+		ArrayList<File> resultList = new ArrayList<File>();
 		for (File file : fList)
 		{
 			if (file.isFile())
 			{
+				resultList.add(file);
 				System.out.println(file.getAbsolutePath() + " isFile");
 			}
 			else if (file.isDirectory())
 			{
-				resultList.addAll(listf(file.getAbsolutePath()));
+				listf(file.getAbsolutePath());
+//				resultList.addAll(listf(file.getAbsolutePath()));
 			}
 		}
-		System.out.println(fList);
+		System.out.println(fList + " fList");
+		System.out.println(resultList + " resultlist");
 		return resultList;
 	}
 
@@ -78,7 +80,7 @@ public class FileHandler
 		{
 			String fileString = fList[i].toString();
 			nameList.add(fileString);
-			System.out.println(nameList.get(i) + " nameList (" + i + ")");
+//			System.out.println(nameList.get(i) + " nameList (" + i + ")");
 		}
 		return nameList;
 	}

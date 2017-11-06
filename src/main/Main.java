@@ -13,11 +13,10 @@ public class Main
 
 	public static void main(String[] args) throws IOException
 	{
-		Thread.currentThread();
-		props = new Props();
 		mf = new Mainframe();
+		props = new Props();
 		mf.run();
-//		props.propertiesIn();
+		props.propertiesIn();
 	}
 	
 // ---------------------------------------------------
