@@ -32,15 +32,14 @@ public class AACPlayer
 	 * creates a new Instance of AACPlayer with a set of Files to be played
 	 * back.
 	 * 
-	 * @param files
-	 *            Filelist to playback.
+	 * @param files Filelist to playback.
 	 */
 	public AACPlayer(List<File> filesListed)
 	{
 
-		loop = false;
-		repeat = false;
-		paused = false;
+		loop 	= false;
+		repeat 	= false;
+		paused 	= false;
 
 		List<File> validFiles = new LinkedList<>();
 
@@ -52,10 +51,15 @@ public class AACPlayer
 				Movie movie = cont.getMovie();
 				List<Track> includedTracks = movie.getTracks();
 
-				if (!includedTracks.isEmpty())
-					validFiles.add(temp);
-				else
+				if (includedTracks.isEmpty())
+				{
 					System.err.println("no tracks found in " + temp.getName() + ". Skipping this one.");
+				}
+
+				else
+				{
+					validFiles.add(temp);
+				}
 			}
 			catch (IOException e)
 			{
@@ -73,11 +77,10 @@ public class AACPlayer
 	 * 
 	 * @param file
 	 */
-//	public AACPlayer(File file) 
+//	public AACPlayer(File file)
 //	{
-//		this(new List<File> file);
+//		this (new File[] {file});
 //	}
-
 
 	/**
 	 * Instances a new Player with one File, Path given as String.
@@ -99,15 +102,15 @@ public class AACPlayer
 			{
 				// local vars
 				byte[] b;
-				AudioTrack track;
-				AudioFormat af;
-				SourceDataLine line;
-				Decoder dec;
-				Frame frame;
-				SampleBuffer buf;
-				int currentTrack;
-				MP4Container cont;
-				Movie movie;
+				AudioTrack 		track;
+				AudioFormat 	af;
+				SourceDataLine 	line;
+				Decoder 		dec;
+				Frame 			frame;
+				SampleBuffer 	buf;
+				int 			currentTrack;
+				MP4Container 	cont;
+				Movie 			movie;
 
 				try
 				{
@@ -153,9 +156,13 @@ public class AACPlayer
 						line.close();
 
 						if (loop)
+						{
 							currentTrack--;
+						}
 						else if (repeat && (currentTrack == files.length - 1))
+						{
 							currentTrack = -1;
+						}
 					}
 				}
 				catch (LineUnavailableException | IOException | InterruptedException e)
@@ -167,7 +174,7 @@ public class AACPlayer
 	}
 
 	/**
-	 * Starts Playback of given File(s) with the first file.
+	 * Starts Playback of given File(s) with the current tracknumber
 	 */
 	public void play(int tracknumber)
 	{

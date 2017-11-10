@@ -1,39 +1,24 @@
 package controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.ArrayList;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JFileChooser;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import gui.Mainframe;
 import main.Main;
 import model.AACPlayer;
 import model.FileHandler;
+import model.MediaPlayerModel;
 import model.Setup;
 import model.Setup.Repeatstate;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.nio.file.Path;
+
 public class Listener implements ActionListener
 {
-	Mainframe mf = Main.getMf();
-	final JFileChooser fc = new JFileChooser();
-	FileHandler fileHandler = new FileHandler();
-	
-	List<String> trackNameList;
-	public String fileLocation;
-	Path directoryName;
-	FileFilter filter = new FileNameExtensionFilter("MP3 Files", "m4a", "mp3", "wav", "aac", "flac");
-	private AACPlayer aacPlayer;
+	MediaPlayerModel mediaPlayerModel = Main.getMediaPlayerModel();
+
 	private Setup setup = new Setup();
+	private Mainframe mf = Main.getMf();
+	private AACPlayer aacPlayer = mediaPlayerModel.getAacPlayer();
 	
 
 
@@ -42,108 +27,134 @@ public class Listener implements ActionListener
 	{
 
 		Object source = e.getSource();
-		Mainframe mf = Main.getMf();
 
-// ---------------------------------------------------
-		
+
 		if (source == mf.getMenuItemOpen())
 		{
-			directoryName = fileHandler.chooseDirectory();
-			ArrayList<File> filesListed = new ArrayList<File>();
-			filesListed = fileHandler.listf(directoryName.toString());
-			trackNameList = fileHandler.listNames(directoryName.toString());
-			mf.addMediaList(filesListed);		
-			
-			aacPlayer = new AACPlayer(filesListed);
+			manageMenuItemOpen();
 		}
 
-// ---------------------------------------------------
 		if (source == mf.getBtnStartPause())
 		{
-			if(!mf.getMediaList().isSelectionEmpty())
-			{
-				if (!aacPlayer.isPlaying() && (mf.getBtnStartPause().getText() == "Start"))
-				{
-					aacPlayer.play(mf.getMediaList().getSelectedIndex());
-					mf.getBtnStartPause().setText("Pause");
-				}
-				else if (aacPlayer.isPlaying())
-				{
-					aacPlayer.pause();
-					mf.getBtnStartPause().setText("Resume");
-				}
-				else if (!aacPlayer.isPlaying() && (mf.getBtnStartPause().getText() == "Resume"))
-				{
-					aacPlayer.resume();
-					mf.getBtnStartPause().setText("Pause");
-				}
-			}
-			else
-			{
-				if (!aacPlayer.isPlaying() && (mf.getBtnStartPause().getText() == "Start"))
-				{
-					aacPlayer.play(0);
-					mf.getBtnStartPause().setText("Pause");
-				}
-				else if (aacPlayer.isPlaying())
-				{
-					aacPlayer.pause();
-					mf.getBtnStartPause().setText("Resume");
-				}
-				else if (!aacPlayer.isPlaying() && (mf.getBtnStartPause().getText() == "Resume"))
-				{
-					aacPlayer.resume();
-					mf.getBtnStartPause().setText("Pause");
-				}
-			}
-
+			manageButtonStartPause();
 		}
-		
-// ---------------------------------------------------
+
 		if (source == mf.getBtnStop())
 		{
-			if (aacPlayer.isPlaying())
-			{
-				aacPlayer.stop();
-				mf.getBtnStartPause().setText("Start");
-			}
+			manageButtonStop();
 		}
-		
-// ---------------------------------------------------
+
 		if (source == mf.getBtnShuffle())
 		{
-			if (mf.getBtnShuffle().getText() == "Enable Shuffle")
-			{
-			}
+			manageButtonShuffle();
 		}
 		
-// ---------------------------------------------------
 		if (source == mf.getBtnRepeatloop())
 		{
-			setup.getRepstate();
-			if (setup.getRepstate() == Repeatstate.REPEATLOOPOFF)
+			manageButtonRepeatLoop();
+		}
+	}
+// ---------------------------------------------------
+// ---------------------------------------------------
+	private void manageMenuItemOpen()
+	{
+		FileHandler fileHandler = new FileHandler();
+		Path directoryName = fileHandler.chooseDirectory();
+		fileHandler.listf(directoryName.toString());
+		mf.addMediaList(mediaPlayerModel.getFileList());
+		mediaPlayerModel.addPlayer();
+	}
+
+// ---------------------------------------------------
+	private void manageButtonStartPause()
+	{
+		if(aacPlayer == null)
+		{
+			System.out.println("aacPlay == null");
+		}
+		if(!mf.getMediaList().isSelectionEmpty())
+		{
+			if (!mediaPlayerModel.getPlayState().PLAYING && (mf.getBtnStartPause().getText() == "Start"))
 			{
-				setup.setRepstate(Repeatstate.LISTLOOPON);
-				mf.getBtnRepeatloop().setText("Loop on");
-				aacPlayer.enableLoop();
+				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.PLAYING);
+//				aacPlayer.play(mf.getMediaList().getSelectedIndex());
+				mf.getBtnStartPause().setText("Pause");
 			}
-			else if (setup.getRepstate() == Repeatstate.LISTLOOPON)
+			else if (mediaPlayerModel.getPlayState().PLAYING)
 			{
-				setup.setRepstate(Repeatstate.REPEATTRACK);
-				mf.getBtnRepeatloop().setText("Repeat on");
-				aacPlayer.disableLoop();
-				aacPlayer.enableRepeat();
+				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.PAUSED);
+				mf.getBtnStartPause().setText("Resume");
 			}
-			else
+			else if (!mediaPlayerModel.getPlayState().PLAYING  && (mf.getBtnStartPause().getText() == "Resume"))
 			{
-				setup.setRepstate(Repeatstate.REPEATLOOPOFF);
-				mf.getBtnRepeatloop().setText("Loop off");
-				aacPlayer.disableLoop();
-				aacPlayer.disableRepeat();
+				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.RESUMED);
+//				aacPlayer.resume();
+				mf.getBtnStartPause().setText("Pause");
+			}
+		}
+		else
+		{
+			if (!mediaPlayerModel.getPlayState().PLAYING && (mf.getBtnStartPause().getText() == "Start"))
+			{
+				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.PLAYING);
+//				aacPlayer.play(0);
+				mf.getBtnStartPause().setText("Pause");
+			}
+			else if (mediaPlayerModel.getPlayState().PLAYING)
+			{
+				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.PAUSED);
+//				aacPlayer.pause();
+				mf.getBtnStartPause().setText("Resume");
+			}
+			else if (!aacPlayer.isPlaying() && (mf.getBtnStartPause().getText() == "Resume"))
+			{
+				aacPlayer.resume();
+				mf.getBtnStartPause().setText("Pause");
 			}
 		}
 	}
-	
-// ---------------------------------------------------
 
+// ---------------------------------------------------
+	private void manageButtonRepeatLoop()
+	{
+		setup.getRepstate();
+		if (setup.getRepstate() == Repeatstate.REPEATLOOPOFF)
+		{
+			setup.setRepstate(Repeatstate.LISTLOOPON);
+			mf.getBtnRepeatloop().setText("Loop on");
+			aacPlayer.enableLoop();
+		}
+		else if (setup.getRepstate() == Repeatstate.LISTLOOPON)
+		{
+			setup.setRepstate(Repeatstate.REPEATTRACK);
+			mf.getBtnRepeatloop().setText("Repeat on");
+			aacPlayer.disableLoop();
+			aacPlayer.enableRepeat();
+		}
+		else
+		{
+			setup.setRepstate(Repeatstate.REPEATLOOPOFF);
+			mf.getBtnRepeatloop().setText("Loop off");
+			aacPlayer.disableLoop();
+			aacPlayer.disableRepeat();
+		}
+	}
+
+// ---------------------------------------------------
+	private void manageButtonStop()
+	{
+		if (aacPlayer.isPlaying())
+		{
+			aacPlayer.stop();
+			mf.getBtnStartPause().setText("Start");
+		}
+	}
+
+// ---------------------------------------------------
+	private void manageButtonShuffle()
+	{
+		if (mf.getBtnShuffle().getText() == "Enable Shuffle")
+		{
+		}
+	}
 }

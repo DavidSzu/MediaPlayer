@@ -1,21 +1,24 @@
 package main;
 
-import java.io.IOException;
-
 import gui.Mainframe;
+import model.MediaPlayerModel;
 import model.Props;
+
+import java.io.IOException;
 
 public class Main
 {
 	private static Mainframe mf;
 	private static Props props;
+    private static MediaPlayerModel mediaPlayerModel;
 
 
 	public static void main(String[] args) throws IOException
 	{
+        mediaPlayerModel = new MediaPlayerModel();
 		mf = new Mainframe();
 		props = new Props();
-		mf.run();
+		mf.initGui();
 		props.propertiesIn();
 	}
 	
@@ -34,5 +37,10 @@ public class Main
 	{
 		return props;
 	}
+
+// ---------------------------------------------------
+    public static MediaPlayerModel getMediaPlayerModel(){ return mediaPlayerModel;}
+
+// ---------------------------------------------------
 
 }

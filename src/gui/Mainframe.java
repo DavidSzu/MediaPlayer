@@ -1,38 +1,20 @@
 package gui;
 
-import java.awt.Color;
+import controller.Listener;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.DefaultListModel;
-//import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.EmptyBorder;
-
-import controller.Listener;
-import main.Main;
-import model.FileHandler;
-import java.awt.FlowLayout;
-import javax.swing.JLabel;
 
 public class Mainframe extends JFrame
 {
 	// ---------------------------------------------------
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private Listener listener = new Listener();
 	private JPanel mainPanel;
 	private JPanel panelControlButtons;
 
@@ -51,55 +33,45 @@ public class Mainframe extends JFrame
 	private JLabel lblTrackProgress;
 	private JLabel lblTrackDuration;
 
-	private DefaultListModel<String> listModel;
 	private JList<File> mediaList;
 
 	private JPanel panelSouth;
 	private JProgressBar progressBar;
-	
-    private static String[] intervList = 
-	{
-		"0: r. Prime/v. Sekunde", 
-		"1: ü. Prime/kl. Sekunde", 
-		"2: gr. Sekunde/v. Terz",
-		"3: ü. Sekunde/kl. Terz",
-		"4: gr. Terz/v. Quart",
-		"5: ü. Terz/r. Quart",
-		"6: ü. Quart/v. Quinte",
-		"7: r. Quinte/v. Sexte",
-		"8: ü. Quinte/kl. Sexte",
-		"9: gr. Sexte/v. Septime",
-		"10: ü. Sexte/kl. Septime",
-		"11: gr. Septime/v. Oktave",
-		"12: ü. Septime/r.Oktave"
-	};
-    private static ArrayList<String> arrList = new ArrayList<String>();
 
-	// ---------------------------------------------------
-	public void run()
-	{
-		try
-		{
-			Main.setMf(Main.getMf());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+// ---------------------------------------------------
 
-	// ---------------------------------------------------
-	// ---------------------------------------------------
-	// Constructor:
-	public Mainframe() throws IOException {
+	public void initGui() throws IOException
+	{
 		setBackground(Color.DARK_GRAY);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 985, 740);
 		setTitle("Media Player");
 		setResizable(true);
+		Listener listener = new Listener();
 
 		// ---------------------------------------------------
 		// Panels:
+		initGUIPanels();
+
+		// ---------------------------------------------------
+		// Buttons:
+		initGUIButtons(listener);
+
+		// ---------------------------------------------------
+		// Miscellaneous:
+		initGUIProgressbar();
+
+		// ---------------------------------------------------
+		// Menus:
+		initGUIMenus(listener);
+
+		// ---------------------------------------------------
+		// End of constructor
+		setVisible(true);
+	}
+// ---------------------------------------------------
+	private void initGUIPanels()
+	{
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.DARK_GRAY);
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -125,9 +97,11 @@ public class Mainframe extends JFrame
 		panelControlButtons.setForeground(Color.LIGHT_GRAY);
 		panelControlButtons.setBackground(Color.LIGHT_GRAY);
 		panelControlButtons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+	}
 
-		// ---------------------------------------------------
-		// Buttons:
+// ---------------------------------------------------
+	private void initGUIButtons(Listener listener)
+	{
 		setBtnBackward(new JButton("Backward"));
 		getBtnBackward().addActionListener(listener);
 
@@ -151,18 +125,11 @@ public class Mainframe extends JFrame
 		setBtnRepeatloop(new JButton("Loop off"));
 		getBtnRepeatloop().addActionListener(listener);
 		panelControlButtons.add(btnRepeatLoop);
+	}
 
-		// ---------------------------------------------------
-		// Miscellaneous:
-		setLblTrackProgress(new JLabel("--:--"));
-
-		progressBar = new JProgressBar();
-		panelControlButtons.add(progressBar);
-
-		setLblTrackDuration(new JLabel("--:--"));
-
-		// ---------------------------------------------------
-		// Menus:
+// ---------------------------------------------------
+	private void initGUIMenus(Listener listener)
+	{
 		menuBar = new JMenuBar();
 		getJMenuBar().setBounds(0, 0, 985, 21);
 		contentPane.add(menuBar);
@@ -177,49 +144,34 @@ public class Mainframe extends JFrame
 		setMnTitelMenu(new JMenu("Titel"));
 		getJMenuBar().add(getMenuTitelMenu());
 		getJMenuBar().setVisible(true);
-
-		// ---------------------------------------------------
-		// End of constructor
-//		addMediaList();
-		setVisible(true);
 	}
 
-	// ---------------------------------------------------
-	// Add MediaList:
-	@SuppressWarnings(
-	{ "unchecked", "rawtypes" })
-	public void addMediaList(ArrayList<File> filesListed)
-//	public void addMediaList()
+// ---------------------------------------------------
+	private void initGUIProgressbar()
 	{
-//		arrList.add("Test1");
-//		arrList.add("Test2");
-//		arrList.add("Test3");
-//		arrList.add("Test4");
-		
-//		setMediaList(new JList(intervList));
-//		setMediaList(new JList(arrList.toArray()));
+		setLblTrackProgress(new JLabel("--:--"));
+
+		progressBar = new JProgressBar();
+		panelControlButtons.add(progressBar);
+
+		setLblTrackDuration(new JLabel("--:--"));
+	}
+
+// ---------------------------------------------------
+	@SuppressWarnings(
+			{ "unchecked", "rawtypes" })
+	public void addMediaList(ArrayList<File> filesListed)
+	{
 		setMediaList(new JList(filesListed.toArray()));
 		getMediaList().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(getMediaList());
-		scrollPane.setBounds(0, 0, 200, 500);
+		scrollPane.setBounds(0, 0, 984, 500);
 		getMainPanel().add(scrollPane);
 		scrollPane.setViewportView(getMediaList());
-
-		
-
-//		DefaultListModel listModel = new DefaultListModel();
-//		mediaList = new JList(listModel);
-//		for (int i = 0; i < filesListed.size(); i++)
-//		{
-//			listModel.addElement(filesListed.get(i));
-//		}
-//		mediaList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-//		JScrollPane scrollPane = new JScrollPane(getMediaList());
-//		scrollPane.setBounds(10, 10, 937, 583);
-//		getMainPanel().add(scrollPane);
 	}
 
-	// ---------------------------------------------------
+
+// ---------------------------------------------------
 	// Getters and Setters:
 
 	public JPanel getMainPanel()
@@ -277,12 +229,7 @@ public class Mainframe extends JFrame
 		return btnForward;
 	}
 
-	public void setBtnForward(JButton btnForward)
-	{
-		this.btnForward = btnForward;
-		// btnForward.setIcon(new
-		// ImageIcon(Mainframe.class.getResource("/resources/forward.jpg")));
-	}
+	public void setBtnForward(JButton btnForward) { this.btnForward = btnForward; }
 
 	// ---------------------------------------------------
 	public JButton getBtnRepeatloop()
@@ -361,12 +308,6 @@ public class Mainframe extends JFrame
 	{
 		this.lblTrackDuration = lblTrackDuration;
 		panelControlButtons.add(lblTrackDuration);
-	}
-
-	// ---------------------------------------------------
-	public DefaultListModel<String> getListModel()
-	{
-		return listModel;
 	}
 
 	// ---------------------------------------------------
