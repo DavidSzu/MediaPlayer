@@ -52,7 +52,9 @@ public class FileHandler
 			{
 				return name.toLowerCase().endsWith("m4a");
 			}
+
 		});
+
 		ArrayList<File> filesListed = mediaPlayerModel.getFileList();
 
 		for (File file : fList)

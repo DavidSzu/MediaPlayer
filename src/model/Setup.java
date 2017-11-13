@@ -10,8 +10,6 @@ public class Setup
 		REPEATTRACK,
 		REPEATLOOPOFF
 	}
-	
-	
 // ---------------------------------------------------
 	public void setRepstate(Repeatstate repstate)
 	{

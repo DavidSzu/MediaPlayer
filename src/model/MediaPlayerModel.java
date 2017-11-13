@@ -8,7 +8,11 @@ import java.util.ArrayList;
  */
 public class MediaPlayerModel
 {
+    AACPlayer aacPlayer;
+    ArrayList<File> fileList = new ArrayList<File>();
+    ArrayList<String> nameList = new ArrayList<String>();
 
+// ---------------------------------------------------
     public enum PlayState
     {
         PLAYING,
@@ -16,18 +20,38 @@ public class MediaPlayerModel
         STOPPED,
         RESUMED
     }
-
     private PlayState playState = PlayState.STOPPED;
 
-    AACPlayer aacPlayer;
-    ArrayList<File> fileList = new ArrayList<File>();
-    ArrayList<String> nameList = new ArrayList<String>();
+    private void notifyPlayer()
+    {
+        playState.notify();
+    }
 
+// ---------------------------------------------------
+    public enum RepeatState
+    {
+        LISTLOOPON,
+        REPEATTRACK,
+        REPEATLOOPOFF
+    }
+    private RepeatState repeatState = RepeatState.REPEATLOOPOFF;
+
+// ---------------------------------------------------
+    public enum ShuffleOnOff
+    {
+        SHUFFLEON,
+        SHUFFLEOFF
+    }
+
+    private ShuffleOnOff shuffleState = ShuffleOnOff.SHUFFLEOFF;
+
+
+// ---------------------------------------------------
+// ---------------------------------------------------
     public void addPlayer ()
     {
         aacPlayer = new AACPlayer(fileList);
     }
-
 
 // ---------------------------------------------------
     public ArrayList<File> getFileList()
@@ -57,6 +81,27 @@ public class MediaPlayerModel
         this.playState = playState;
     }
 
+// ---------------------------------------------------
+    public RepeatState getRepeatState()
+    {
+        return repeatState;
+    }
+    public void setRepeatState(RepeatState repeatState)
+    {
+        this.repeatState = repeatState;
+    }
 
+// ---------------------------------------------------
+    public ShuffleOnOff getShuffleState()
+    {
+        return shuffleState;
+    }
+
+    public void setShuffleState(ShuffleOnOff shuffleState)
+    {
+        this.shuffleState = shuffleState;
+    }
+
+// ---------------------------------------------------
 
 }
