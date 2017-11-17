@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-
 import gui.Mainframe;
 import main.Main;
 

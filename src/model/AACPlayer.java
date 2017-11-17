@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -25,8 +26,10 @@ public class AACPlayer
 	private boolean loop;
 	private boolean repeat;
 	private boolean paused;
+	private boolean shuffleOnOff;
 	private Thread playback;
 	private File[] files;
+
 
 	/**
 	 * creates a new Instance of AACPlayer with a set of Files to be played
@@ -163,6 +166,11 @@ public class AACPlayer
 						{
 							currentTrack = -1;
 						}
+						if(shuffleOnOff)
+						{
+							int random = new Random().nextInt(files.length);
+							currentTrack = random;
+						}
 					}
 				}
 				catch (LineUnavailableException | IOException | InterruptedException e)
@@ -174,13 +182,13 @@ public class AACPlayer
 	}
 
 	/**
-	 * Starts Playback of given File(s) with the current tracknumber
+	 * Starts Playback of given File(s) with the current track number
 	 */
 	public void play(int tracknumber)
 	{
 		if (playback != null && playback.isAlive())
 		{
-			System.err.println("it plays yet, before you start again, stop it.");
+			System.out.println("Already playing.");
 			return;
 		}
 
@@ -193,7 +201,11 @@ public class AACPlayer
 	 */
 	public void stop()
 	{
-		playback.interrupt();
+		if (playback != null)
+		{
+			playback.interrupt();
+		}
+
 	}
 
 	/**
@@ -246,15 +258,11 @@ public class AACPlayer
 	}
 
 	/**
-	 * Checks the state of playback.
-	 * 
-	 * @return true if playback thread is still alive
+	 * Sets shuffle to On/Off
+	 * @param shuffleState
 	 */
-	public boolean isPlaying()
+	public void isShuffleOn(boolean shuffleState)
 	{
-		if (playback != null)
-			return playback.isAlive();
-		else
-			return false;
+		this.shuffleOnOff = shuffleState;
 	}
 }

@@ -65,25 +65,27 @@ public class Listener implements ActionListener
 	{
 		if(!mf.getMediaList().isSelectionEmpty())
 		{
-			if (mediaPlayerModel.getPlayState() != PlayState.PLAYING && (mf.getBtnStartPause().getText() == "Start"))
+			if (mediaPlayerModel.getPlayState() != PlayState.PLAYING)
 			{
-				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.PLAYING);
+				mediaPlayerModel.setTrackNumber(mf.getMediaList().getSelectedIndex());
+				mediaPlayerModel.setAudioURL(mf.getMediaList().getSelectedIndex());
+				mediaPlayerModel.setPlayState(PlayState.PLAYING);
 				mf.getBtnStartPause().setText("Pause");
 			}
 			else if (mediaPlayerModel.getPlayState() == PlayState.PLAYING)
 			{
-				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.PAUSED);
+				mediaPlayerModel.setPlayState(PlayState.PAUSED);
 				mf.getBtnStartPause().setText("Resume");
 			}
-			else if (mediaPlayerModel.getPlayState() != PlayState.PLAYING  && (mf.getBtnStartPause().getText() == "Resume"))
+			else if (mediaPlayerModel.getPlayState() != PlayState.PLAYING)
 			{
-				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.RESUMED);
+				mediaPlayerModel.setPlayState(PlayState.RESUMED);
 				mf.getBtnStartPause().setText("Pause");
 			}
 		}
 		else
 		{
-			if (mediaPlayerModel.getPlayState() != PlayState.PLAYING && (mf.getBtnStartPause().getText() == "Start"))
+			if (mediaPlayerModel.getPlayState() != PlayState.PLAYING )
 			{
 				mediaPlayerModel.setPlayState(PlayState.PLAYING);
 				mf.getBtnStartPause().setText("Pause");
@@ -93,7 +95,7 @@ public class Listener implements ActionListener
 				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.PAUSED);
 				mf.getBtnStartPause().setText("Resume");
 			}
-			else if (mediaPlayerModel.getPlayState() != PlayState.PLAYING && (mf.getBtnStartPause().getText() == "Resume"))
+			else if (mediaPlayerModel.getPlayState() != PlayState.PLAYING)
 			{
 				mediaPlayerModel.setPlayState(MediaPlayerModel.PlayState.RESUMED);
 				mf.getBtnStartPause().setText("Pause");
