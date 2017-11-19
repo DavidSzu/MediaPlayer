@@ -72,6 +72,7 @@ public class MediaPlayerModel
             break;
             case REPEATLOOPOFF: aacPlayer.disableLoop();    aacPlayer.disableRepeat();
             break;
+            default: aacPlayer.disableLoop(); aacPlayer.disableRepeat();
         }
     }
 
@@ -83,6 +84,7 @@ public class MediaPlayerModel
             break;
             case SHUFFLEOFF:    aacPlayer.isShuffleOn(false);
             break;
+            default: aacPlayer.isShuffleOn(false);
         }
     }
 
