@@ -8,6 +8,7 @@ import model.MediaPlayerModel.PlayState;
 import model.MediaPlayerModel.RepeatState;
 import model.MediaPlayerModel.ShuffleOnOff;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.nio.file.Path;
@@ -57,6 +58,12 @@ public class Listener implements ActionListener
 		Path directoryName = fileHandler.chooseDirectory();
 		fileHandler.listf(directoryName.toString());
 		mf.addMediaList(mediaPlayerModel.getFileList());
+//		mf.setMediaList(new JList(mediaPlayerModel.getFileList().toArray()));
+//		mf.getMediaList().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//		JScrollPane scrollPane = new JScrollPane(mf.getMediaList());
+//		scrollPane.setBounds(0, 0, 984, 500);
+//		mf.getMainPanel().add(scrollPane);
+//		scrollPane.setViewportView(mf.getMediaList());
 		mediaPlayerModel.addPlayer();
 	}
 
