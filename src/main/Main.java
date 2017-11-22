@@ -27,10 +27,6 @@ public class Main
 	{
 		return mf;
 	}
-	public static void setMf(Mainframe newMf)
-	{
-		mf = newMf;
-	}
 	
 // ---------------------------------------------------
 	public static Props getProps()

@@ -11,11 +11,13 @@ import java.util.ArrayList;
 public class MediaPlayerModel
 {
     private AACPlayer aacPlayer;
+    private BACPlayer bacPlayer;
     private ArrayList<File> fileList = new ArrayList<File>();
     private ArrayList<URL> urlList = new ArrayList<URL>();
     private ArrayList<String> nameList = new ArrayList<String>();
     private int trackNumber;
     private URL audioURL;
+    private String fileExtension = null;
 
 
 // ---------------------------------------------------
@@ -47,31 +49,33 @@ public class MediaPlayerModel
 
 // ---------------------------------------------------
     private void updatePlayState()
-    {    	
-        switch (playState)
+    {
+        switch (fileExtension)
         {
-            case PLAYING:   aacPlayer.play(trackNumber);
+            case "m4a": playAAC();
             break;
-            case PAUSED:    aacPlayer.pause();
+            case "mp3": playBAC();
             break;
-            case STOPPED:   aacPlayer.stop();
+            case "wav": playBAC();
             break;
-            case RESUMED:   aacPlayer.resume();
+            case "aac": playAAC();
             break;
-            default: aacPlayer.stop();
+            default: fileExtension = null;
         }
+
     }
 
     private void updateRepeatState()
     {
         switch (repeatState)
         {
-            case LISTLOOPON:    aacPlayer.enableLoop();
+            case LISTLOOPON:    enableLoop();
             break;
-            case REPEATTRACK:   aacPlayer.enableRepeat();
+            case REPEATTRACK:   enableRepeat();
             break;
-            case REPEATLOOPOFF: aacPlayer.disableLoop();    aacPlayer.disableRepeat();
+            case REPEATLOOPOFF: setRepeatLoopOff();
             break;
+            default: setRepeatLoopOff();
         }
     }
 
@@ -79,18 +83,85 @@ public class MediaPlayerModel
     {
         switch (shuffleState)
         {
-            case SHUFFLEON:     aacPlayer.isShuffleOn(true);
+            case SHUFFLEON:     setShuffleOn();
             break;
-            case SHUFFLEOFF:    aacPlayer.isShuffleOn(false);
+            case SHUFFLEOFF:    setShuffleOff();
             break;
+            default: setShuffleOff();
         }
+    }
+
+    private void playAAC()
+    {
+        switch (playState)
+        {
+            case PLAYING:   aacPlayer.play(trackNumber);
+                break;
+            case PAUSED:    aacPlayer.pause();
+                break;
+            case STOPPED:   aacPlayer.stop();
+                break;
+            case RESUMED:   aacPlayer.resume();
+                break;
+            default: aacPlayer.stop();
+        }
+    }
+
+    private void playBAC()
+    {
+        switch (playState)
+        {
+            case PLAYING:   bacPlayer.play();
+                break;
+            case PAUSED:    bacPlayer.pause();
+                break;
+            case STOPPED:   bacPlayer.stop();
+                break;
+            case RESUMED:   bacPlayer.resume();
+                break;
+            default: aacPlayer.stop();
+        }
+    }
+
+    private void setShuffleOn()
+    {
+        aacPlayer.isShuffleOn(true);
+      //bacPlayer.isShuffleOn(true)
+    }
+    private void setShuffleOff()
+    {
+        aacPlayer.isShuffleOn(false);
+      //bacPlayer.isShuffleOn(false);
+    }
+
+    private void enableLoop()
+    {
+        aacPlayer.enableLoop();
+      //bacPlayer.enableLoop();
+    }
+    private void enableRepeat()
+    {
+        aacPlayer.enableRepeat();
+      //bacPlayer.enableRepeat();
+    }
+    private void setRepeatLoopOff()
+    {
+        aacPlayer.disableLoop();
+        aacPlayer.disableRepeat();
+      //bacPlayer.disableLoop();
+      //bacPlayer.disableRepeat();
     }
 
 // ---------------------------------------------------
 // ---------------------------------------------------
-    public void addPlayer ()
+    public void addAACPlayer()
     {
         aacPlayer = new AACPlayer(fileList);
+    }
+
+    public void addBACPlayer()
+    {
+        bacPlayer = new BACPlayer();
     }
 
 // ---------------------------------------------------
@@ -166,6 +237,15 @@ public class MediaPlayerModel
     public void setAudioURL(int index)
     {
         this.audioURL = urlList.get(index);
+    }
+
+// ---------------------------------------------------
+    public String getFileExtension() {
+        return fileExtension;
+    }
+
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
     }
 
 }

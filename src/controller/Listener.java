@@ -56,8 +56,10 @@ public class Listener implements ActionListener
 		FileHandler fileHandler = new FileHandler();
 		Path directoryName = fileHandler.chooseDirectory();
 		fileHandler.listf(directoryName.toString());
+		System.out.println(mediaPlayerModel.getFileList());
 		mf.addMediaList(mediaPlayerModel.getFileList());
-		mediaPlayerModel.addPlayer();
+//		mediaPlayerModel.addBACPlayer();
+		mediaPlayerModel.addAACPlayer();
 	}
 
 // ---------------------------------------------------

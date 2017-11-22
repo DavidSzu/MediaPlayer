@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="MediaPlayer">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jaad-0.8.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jl1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -52,9 +52,33 @@ public class FileHandler
 			@Override
 			public boolean accept(File dir, String name)
 			{
-				return name.toLowerCase().endsWith("m4a");
+				if(name.toLowerCase().endsWith("m4a"))
+				{
+					mediaPlayerModel.setFileExtension("m4a");
+					return name.toLowerCase().endsWith("m4a");
+				}
+				else if(name.toLowerCase().endsWith("mp3"))
+				{
+					mediaPlayerModel.setFileExtension("mp3");
+					return name.toLowerCase().endsWith("mp3");
+				}
+				else if(name.toLowerCase().endsWith("wav"))
+				{
+					mediaPlayerModel.setFileExtension("wav");
+					return name.toLowerCase().endsWith("wav");
+				}
+				else if(name.toLowerCase().endsWith("aac"))
+				{
+					mediaPlayerModel.setFileExtension("aac");
+					return name.toLowerCase().endsWith("aac");
+				}
+				else if(name.toLowerCase().endsWith("flac"))
+				{
+					mediaPlayerModel.setFileExtension("flac");
+					return name.toLowerCase().endsWith("flac");
+				}
+				else return false;
 			}
-
 		});
 		
 		ArrayList<File> filesListed = mediaPlayerModel.getFileList();
@@ -73,16 +97,12 @@ public class FileHandler
 				{
 					e.printStackTrace();
 				}
-				System.out.println(file.getAbsolutePath() + " isFile");
 			}
 			else if (file.isDirectory())
 			{
 				listf(file.getAbsolutePath());
 			}
-
 		}
-		System.out.println(mediaPlayerModel.getFileList() + " mediaPlayerModel.getFileList");
-
 	}
 
 	// ---------------------------------------------------

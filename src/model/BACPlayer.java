@@ -15,13 +15,13 @@ public class BACPlayer
 	private Mixer mixer;
 	private Clip clip;
 	private MediaPlayerModel mediaPlayerModel = Main.getMediaPlayerModel();
+	private long cliptime;
 
-	public void playAudio()
+	public BACPlayer()
 	{
 		Mixer.Info[] mixInfo = AudioSystem.getMixerInfo();
 		mixer = AudioSystem.getMixer(mixInfo[0]);
 		DataLine.Info dataInfo = new DataLine.Info(Clip.class, null);
-
 		try
 		{
 			clip = (Clip) mixer.getLine(dataInfo);
@@ -30,12 +30,16 @@ public class BACPlayer
 		{
 			lue.printStackTrace();
 		}
+	}
 
+	public void play()
+	{
 		try
 		{
 			URL soundURL = mediaPlayerModel.getAudioURL();
 			AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundURL);
 			clip.open(audioStream);
+			//clip.start();
 		}
 		
 		catch (LineUnavailableException e)
@@ -50,5 +54,22 @@ public class BACPlayer
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public void pause()
+	{
+		cliptime = clip.getMicrosecondPosition();
+		clip.stop();
+	}
+
+	public void resume()
+	{
+		clip.setMicrosecondPosition(cliptime);
+		clip.start();
+	}
+
+	public void stop()
+	{
+		clip.stop();
 	}
 }
