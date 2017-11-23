@@ -17,9 +17,9 @@ public class Main
 	{
         mediaPlayerModel = new MediaPlayerModel();
 		mf = new Mainframe();
-		props = new Props();
+//		props = new Props();
 		mf.initGui();
-		props.propertiesIn();
+//		props.propertiesIn();
 	}
 	
 // ---------------------------------------------------

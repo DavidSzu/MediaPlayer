@@ -49,9 +49,11 @@ public class FileHandler
 		File directory = new File(directoryName);
 		File[] fList = directory.listFiles(new ExtensionFileFilter("MP3 Files", "m4a", "mp3", "wav", "aac", "flac")
 		{
+			
 			@Override
 			public boolean accept(File dir, String name)
 			{
+<<<<<<< HEAD
 				if(name.toLowerCase().endsWith("m4a"))
 				{
 					mediaPlayerModel.setFileExtension("m4a");
@@ -78,6 +80,29 @@ public class FileHandler
 					return name.toLowerCase().endsWith("flac");
 				}
 				else return false;
+=======
+//				if(name.toLowerCase().endsWith("m4a"))
+//				{
+					return name.toLowerCase().endsWith("m4a");
+//				}
+//				else if(name.toLowerCase().endsWith("mp3"))
+//				{
+//					return name.toLowerCase().endsWith("mp3");
+//				}
+//				else if(name.toLowerCase().endsWith("wav"))
+//				{
+//					return name.toLowerCase().endsWith("wav");
+//				}
+//				else if(name.toLowerCase().endsWith("aac"))
+//				{
+//					return name.toLowerCase().endsWith("aac");
+//				}
+//				else if(name.toLowerCase().endsWith("flac"))
+//				{
+//					return name.toLowerCase().endsWith("flac");
+//				}
+//				else return false;
+>>>>>>> 639d6baa503ab192f24719130aae8d2d4c6fa771
 			}
 		});
 		

@@ -46,7 +46,7 @@ public class Mainframe extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 985, 740);
 		setTitle("Media Player");
-		setResizable(true);
+		setResizable(false);
 		Listener listener = new Listener();
 
 		// ---------------------------------------------------

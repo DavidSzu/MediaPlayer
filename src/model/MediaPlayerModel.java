@@ -75,7 +75,11 @@ public class MediaPlayerModel
             break;
             case REPEATLOOPOFF: setRepeatLoopOff();
             break;
+<<<<<<< HEAD
             default: setRepeatLoopOff();
+=======
+            default: aacPlayer.disableLoop(); aacPlayer.disableRepeat();
+>>>>>>> 639d6baa503ab192f24719130aae8d2d4c6fa771
         }
     }
 
@@ -87,6 +91,7 @@ public class MediaPlayerModel
             break;
             case SHUFFLEOFF:    setShuffleOff();
             break;
+<<<<<<< HEAD
             default: setShuffleOff();
         }
     }
@@ -120,6 +125,9 @@ public class MediaPlayerModel
             case RESUMED:   bacPlayer.resume();
                 break;
             default: aacPlayer.stop();
+=======
+            default: aacPlayer.isShuffleOn(false);
+>>>>>>> 639d6baa503ab192f24719130aae8d2d4c6fa771
         }
     }
 
